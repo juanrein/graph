@@ -1,33 +1,56 @@
 import { View } from "./view";
 import { Graph, GraphNode } from "./model";
+import { Circle, Point } from "./geometry";
 
 export class Controller {
     private graph: Graph;
     private view: View;
-    private selected?: GraphNode;    
+    private mouseDownPoint?: Point;
 
     constructor(graph: Graph, view: View) {
         this.view = view;
         this.graph = graph;
     }
 
-    handleClick(e: MouseEvent) {
-        let x = e.clientX;
-        let y = e.clientY;
-        let clicked = this.graph.find(x,y);
-        if (!this.graph.intersectsAny(x,y, 50)) {
-            this.graph.addNode(x,y,50, "aa");
-            this.view.drawNode(x,y,50, "aa");
+    handleMouseDown(e: MouseEvent) {
+        console.log("mouse down event");
+        let x = e.offsetX;
+        let y = e.offsetY;
+        this.mouseDownPoint = {
+            x: x,
+            y: y
+        };
+    }
+
+    handleMouseUp(e: MouseEvent) {
+        console.log("mouse up event");
+        let x = e.offsetX;
+        let y = e.offsetY;
+
+        let circle: Circle = {
+            point: {
+                x: x,
+                y: y
+            },
+            radius: 50
         }
-        else if (this.selected) {
-            if (clicked != null && !clicked.equals(this.selected)) {
-                this.graph.connect(this.selected, clicked, false);
-                let line = this.graph.getLineBetween(this.selected, clicked);
-                let {x1,y1,x2,y2} = line
-                this.view.drawConnection(x1,y1,x2,y2);
+        let value = "aa";
+
+        let startPointNode = this.graph.find(this.mouseDownPoint);
+        let endPointNode = this.graph.find(circle.point);
+        //create new node when startpoint and endpoint are not nodes
+        if (!startPointNode && !endPointNode) {
+            this.graph.addNode(circle, value);
+        }
+        else if (startPointNode && endPointNode) {
+            //create connection when startpoint and endpoint are both nodes and are not the same node
+            if (!startPointNode.equals(endPointNode)) {
+                this.graph.connect(startPointNode, endPointNode);
             }
         }
-        this.selected = clicked;
+        
+
+        this.view.update();
     }
 
 }

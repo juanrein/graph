@@ -12,8 +12,9 @@ window.onload = () => {
     canvas.width = window.innerWidth;
     let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     ctx.font = "30px Arial"
-    let graph = new Graph();
-    let view = new View(canvas, ctx);
+    let graph = new Graph(false);
+    let view = new View(canvas, ctx, graph);
     let controller = new Controller(graph, view);
-    canvas.addEventListener("click", e => controller.handleClick(e));
+    canvas.addEventListener("mousedown", e => controller.handleMouseDown(e));
+    canvas.addEventListener("mouseup", e => controller.handleMouseUp(e));
 }

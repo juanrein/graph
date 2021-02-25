@@ -1,15 +1,13 @@
+import { Circle, intersects, contains, Point, Line } from "./geometry"
+
 export class GraphNode {
-    static identifier: number;
-    public x: number;
-    public y: number;
-    public value: string;
-    public radius: number;
+    static identifier: number = 0;
+    public circle: Circle
     private id: number;
-    constructor(x: number,y:number,radius:number, value: string) {
+    public value: string;
+    constructor(circle: Circle, value: string) {
+        this.circle = circle;
         this.value = value;
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
         this.id = GraphNode.identifier;
         GraphNode.identifier++;
     }
@@ -17,65 +15,73 @@ export class GraphNode {
     equals(other: GraphNode) {
         return this.id == other.id;
     }
-
-    contains(x: number,y: number): boolean {
-        return ((x - this.x)*(x - this.x) + (y - this.y)*(y - this.y) <= this.radius * this.radius)
-    }
-
-    /**
-     * check if circles touch
-     */
-    intersects(x: number,y: number, radius:number) {
-        let distance = Math.sqrt((x-this.x)*(x-this.x) + (y-this.y)*(y-this.y));
-        return distance <= this.radius + radius
-    }
 }
 
 export class Graph {
-    private nodes: GraphNode[]
-    private connections: number[][];
-    constructor() {
+    public nodes: GraphNode[]
+    public connections: number[][];
+    private directed: boolean;
+    constructor(directed: boolean) {
         this.nodes = [];
         this.connections = [];
+        this.directed = directed;
     }
 
-    addNode(x: number,y: number,radius: number, value: string) {
-        this.nodes.push(new GraphNode(x,y,radius, value));
+    addNode(circle: Circle, value: string) {
+        let node = new GraphNode(circle, value);
+        this.nodes.push(node);
+        this.connections.push([]);
+        return node;
     }
 
-    find(x: number,y: number) {
+    find(point: Point | undefined) {
+        if (!point) {
+            return undefined;
+        }
         for (let node of this.nodes) {
-            if (node.contains(x,y)) {
+            if (contains(node.circle, point)) {
                 return node;
             }
         }
     }
-    intersectsAny(x: number,y: number,radius: number) {
+    intersectsAny(circle: Circle) {
         for (let node of this.nodes) {
-            if (node.intersects(x,y,radius)) {
+            if (intersects(node.circle, circle)) {
                 return true;
             }
         }
         return false;
     }
-    connect(a: GraphNode, b: GraphNode, directed: boolean) {
-        let ai = this.nodes.findIndex((v,i,o) => a.equals(v));        
-        let bi = this.nodes.findIndex((v,i,o) => b.equals(v));       
+
+    connect(a: GraphNode, b: GraphNode) {
+        console.log(a,b);
+        
+        let ai = this.nodes.findIndex(v => a.equals(v));
+        let bi = this.nodes.findIndex(v => b.equals(v));
         if (ai == -1 || bi == -1) {
-            return
-        } 
-        this.connections[ai].push(bi);
-        if (!directed) {
-            this.connections[bi].push(ai);
+            throw new Error(`Both nodes don't exist ${a} ${b}`);
         }
+        if (!this.connections[ai].includes(bi)) {
+            this.connections[ai].push(bi);
+            if (!this.directed && !this.connections[bi].includes(ai)) {
+                this.connections[bi].push(ai);
+            }
+        }
+
     }
 
-    getLineBetween(a: GraphNode,b: GraphNode) {
-        return {
-            x1: a.x,
-            y1: a.y,
-            x2: b.x,
-            y2: b.y
+    getConnectionsAsLines() {
+        let lines = [];
+        for (let i=0; i<this.connections.length; i++) {
+            let node = this.nodes[i];
+            let {x:x1,y:y1} = node.circle.point
+            for (let j=0; j<this.connections[i].length; j++) {
+                let neighbor = this.nodes[this.connections[i][j]];
+                let {x:x2,y:y2} = neighbor.circle.point;
+                let line: Line = {x1,y1,x2,y2};
+                lines.push(line);
+            }
         }
+        return lines;
     }
 }
