@@ -1,5 +1,5 @@
 import { View } from "./view";
-import { Graph } from "./model";
+import { Graph } from "./graph";
 import { Circle, Point } from "./geometry";
 import { ValueController } from "./valueController";
 
@@ -41,11 +41,11 @@ export class CanvasController {
         let endPointNode = this.graph.find(circle.point);
         //create new node when startpoint and endpoint are not nodes
         if (!startPointNode && !endPointNode) {
-            if (this.valueController.values.nodeValue.length > 0) {
-                this.graph.addNode(circle, this.valueController.values.nodeValue);
+            if (this.valueController.values.nodeValue === "<autoincrement>") {
+                this.graph.addNode(circle, null);
             }
             else {
-                this.graph.addNode(circle, null);
+                this.graph.addNode(circle, this.valueController.values.nodeValue);
             }
         }
         else if (startPointNode && endPointNode) {

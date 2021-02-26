@@ -1,5 +1,5 @@
 import { Line } from "./geometry";
-import { Graph, GraphNode } from "./model";
+import { Graph, GraphNode } from "./graph";
 export class View {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;

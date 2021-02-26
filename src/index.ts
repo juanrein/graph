@@ -1,6 +1,6 @@
 import { CanvasController } from "./canvascontroller";
 import { ExportViewController } from "./exportViewController";
-import { Graph } from "./model";
+import { Graph } from "./graph";
 import { ControlValues, ValueController } from "./valueController";
 import { View } from "./view";
 
@@ -12,7 +12,7 @@ import { View } from "./view";
 window.onload = () => {
     let defaultControlValues: ControlValues = {
         radius: 50,
-        nodeValue: ""
+        nodeValue: "<autoincrement>",
     }
 
     let canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -28,11 +28,11 @@ window.onload = () => {
     
     let valCtrlDiv = document.getElementById("valueControls") as HTMLElement;
     let exportButton = document.getElementById("exportButton") as HTMLElement;
-    let link = document.getElementById("exportLink") as HTMLLinkElement;
+
     let graph = new Graph(false);
     let view = new View(canvas, ctx, graph);
     let valueController = new ValueController(valCtrlDiv, defaultControlValues);
-    let exportController = new ExportViewController(graph, link);
+    let exportController = new ExportViewController(graph);
     let canvasController = new CanvasController(graph, view, valueController);
     
     exportButton.addEventListener("click", e => exportController.handleExport(e));
