@@ -32,7 +32,9 @@ export function intersects(circleA: Circle, circleB: Circle) {
     return distance <= r1 + r2;
 }
 
-
+/**
+ * Direct line between centers of circles excluding parts that are inside circles
+ */
 export function getLineBetween(circle1: Circle, circle2: Circle): Line {
     let x1 = circle1.point.x;
     let y1 = circle1.point.y;

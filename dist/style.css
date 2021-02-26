@@ -3,7 +3,25 @@
     margin: 0;
 }
 
+#controls {
+    height: 10vh;
+}
+
+#controls div {
+    display: inline-block;
+    margin-right: 1em;
+}
+label {
+    display: block;
+}
+
+input {
+    padding: 0.25em;
+}
+
 #canvas {
+    height: 90vh;
     background-color: aliceblue;
     display: block;
 }
+

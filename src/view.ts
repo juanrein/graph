@@ -1,4 +1,4 @@
-import { Circle, Line } from "./geometry";
+import { Line } from "./geometry";
 import { Graph, GraphNode } from "./model";
 export class View {
     private canvas: HTMLCanvasElement;
