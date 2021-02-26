@@ -1,8 +1,8 @@
 import { CanvasController } from "./canvascontroller";
+import { ExportViewController } from "./exportViewController";
 import { Graph } from "./model";
 import { ControlValues, ValueController } from "./valueController";
 import { View } from "./view";
-
 
 
 /**
@@ -26,11 +26,16 @@ window.onload = () => {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     
+    let valCtrlDiv = document.getElementById("valueControls") as HTMLElement;
+    let exportButton = document.getElementById("exportButton") as HTMLElement;
+    let link = document.getElementById("exportLink") as HTMLLinkElement;
     let graph = new Graph(false);
     let view = new View(canvas, ctx, graph);
-    let valueController = new ValueController(defaultControlValues);
-    let controller = new CanvasController(graph, view, valueController);
+    let valueController = new ValueController(valCtrlDiv, defaultControlValues);
+    let exportController = new ExportViewController(graph, link);
+    let canvasController = new CanvasController(graph, view, valueController);
     
-    canvas.addEventListener("mousedown", e => controller.handleMouseDown(e));
-    canvas.addEventListener("mouseup", e => controller.handleMouseUp(e));
+    exportButton.addEventListener("click", e => exportController.handleExport(e));
+    canvas.addEventListener("mousedown", e => canvasController.handleMouseDown(e));
+    canvas.addEventListener("mouseup", e => canvasController.handleMouseUp(e));
 }

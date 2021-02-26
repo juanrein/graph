@@ -16,7 +16,6 @@ export class CanvasController {
     }
 
     handleMouseDown(e: MouseEvent) {
-        console.log("mouse down event");
         let x = e.offsetX;
         let y = e.offsetY;
         this.mouseDownPoint = {
@@ -27,7 +26,6 @@ export class CanvasController {
 
 
     handleMouseUp(e: MouseEvent) {
-        console.log("mouse up event");
         let x = e.offsetX;
         let y = e.offsetY;
         let radius = this.valueController.values.radius;

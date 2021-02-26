@@ -8,11 +8,10 @@ export class ValueController {
     private defaults: ControlValues;
     public values: ControlValues;
    
-    constructor(defaults: ControlValues) {
+    constructor(root: HTMLElement, defaults: ControlValues) {
         this.defaults = defaults;
         this.values = Object.assign({}, defaults);
 
-        let controlsDiv = document.getElementById("controls") as HTMLElement;
         for (let k in this.defaults) {
             let div = document.createElement("div");
             
@@ -33,7 +32,7 @@ export class ValueController {
             div.appendChild(label);
             div.appendChild(input);
 
-            controlsDiv.appendChild(div);
+            root.appendChild(div);
         }
     }
 

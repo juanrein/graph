@@ -14,8 +14,6 @@ export class View {
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
         this.graph.nodes.forEach(n => this.drawNode(n))
         this.graph.getConnectionsAsLines().forEach(line => this.drawLine(line));
-
-        console.log(this.graph)
     }
 
     drawNode({circle, value}: GraphNode) {
