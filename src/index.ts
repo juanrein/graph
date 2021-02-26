@@ -12,6 +12,8 @@ window.onload = () => {
     canvas.width = window.innerWidth;
     let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     ctx.font = "30px Arial"
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     let graph = new Graph(false);
     let view = new View(canvas, ctx, graph);
     let controller = new Controller(graph, view);

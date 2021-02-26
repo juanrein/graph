@@ -1,6 +1,6 @@
 import { View } from "./view";
 import { Graph, GraphNode } from "./model";
-import { Circle, Point } from "./geometry";
+import { Circle, getLineBetween, Point } from "./geometry";
 
 export class Controller {
     private graph: Graph;
@@ -34,13 +34,12 @@ export class Controller {
             },
             radius: 50
         }
-        let value = "aa";
 
         let startPointNode = this.graph.find(this.mouseDownPoint);
         let endPointNode = this.graph.find(circle.point);
         //create new node when startpoint and endpoint are not nodes
         if (!startPointNode && !endPointNode) {
-            this.graph.addNode(circle, value);
+            this.graph.addNode(circle, null);
         }
         else if (startPointNode && endPointNode) {
             //create connection when startpoint and endpoint are both nodes and are not the same node
@@ -48,9 +47,6 @@ export class Controller {
                 this.graph.connect(startPointNode, endPointNode);
             }
         }
-        
-
         this.view.update();
     }
-
 }

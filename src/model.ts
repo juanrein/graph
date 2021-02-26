@@ -1,15 +1,22 @@
-import { Circle, intersects, contains, Point, Line } from "./geometry"
+import { Circle, intersects, contains, Point, Line, getLineBetween } from "./geometry"
 
 export class GraphNode {
     static identifier: number = 0;
     public circle: Circle
     private id: number;
     public value: string;
-    constructor(circle: Circle, value: string) {
+    constructor(circle: Circle, value: string | null) {
         this.circle = circle;
-        this.value = value;
+
         this.id = GraphNode.identifier;
         GraphNode.identifier++;
+        
+        if (value == null) {
+            this.value = this.id.toString();
+        }
+        else {
+            this.value = value;
+        }
     }
 
     equals(other: GraphNode) {
@@ -27,7 +34,7 @@ export class Graph {
         this.directed = directed;
     }
 
-    addNode(circle: Circle, value: string) {
+    addNode(circle: Circle, value: string | null) {
         let node = new GraphNode(circle, value);
         this.nodes.push(node);
         this.connections.push([]);
@@ -73,12 +80,10 @@ export class Graph {
     getConnectionsAsLines() {
         let lines = [];
         for (let i=0; i<this.connections.length; i++) {
-            let node = this.nodes[i];
-            let {x:x1,y:y1} = node.circle.point
+            let circle = this.nodes[i].circle;
             for (let j=0; j<this.connections[i].length; j++) {
                 let neighbor = this.nodes[this.connections[i][j]];
-                let {x:x2,y:y2} = neighbor.circle.point;
-                let line: Line = {x1,y1,x2,y2};
+                let line = getLineBetween(circle, neighbor.circle);
                 lines.push(line);
             }
         }

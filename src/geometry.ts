@@ -32,13 +32,34 @@ export function intersects(circleA: Circle, circleB: Circle) {
     return distance <= r1 + r2;
 }
 
-export function getLineBetween(p1: Point, p2: Point): Line {
-    let {x,y} = p1;
-    let {x:x2, y: y2} = p2;
+
+export function getLineBetween(circle1: Circle, circle2: Circle): Line {
+    let x1 = circle1.point.x;
+    let y1 = circle1.point.y;
+    let x2 = circle2.point.x;
+    let y2 = circle2.point.y;
+    let radius1 = circle1.radius;
+    let radius2 = circle2.radius;
+
+    let dx1 = x2 - x1;
+    let dy1 = y2 - y1;
+
+    let dx2 = x1 - x2;
+    let dy2 = y1 - y2;
+
+    let len1 = Math.sqrt(dx1*dx1 + dy1*dy1);   
+    let len2 = Math.sqrt(dx2*dx2 + dy2*dy2);   
+
+    let dx1n = dx1 / len1;
+    let dy1n = dy1 / len1;
+    
+    let dx2n = dx2 / len2;
+    let dy2n = dy2 / len2;
+
     return {
-        x1: x, 
-        y1: y,
-        x2: x2,
-        y2: y2
+        x1: x1 + dx1n * radius1,
+        y1: y1 + dy1n * radius1,
+        x2: x2 + dx2n * radius2,
+        y2: y2 + dy2n * radius2
     };
 }
