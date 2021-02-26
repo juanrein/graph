@@ -1,7 +1,7 @@
 import { CanvasController } from "./canvascontroller";
 import { ExportViewController } from "./exportViewController";
 import { Graph } from "./graph";
-import { ControlValues, ValueController } from "./valueController";
+import { ControlValues, Mode, ValueController } from "./valueController";
 import { View } from "./view";
 
 
@@ -13,6 +13,7 @@ window.onload = () => {
     let defaultControlValues: ControlValues = {
         radius: 50,
         nodeValue: "<autoincrement>",
+        mode: Mode.ADD
     }
 
     let canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -26,16 +27,20 @@ window.onload = () => {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     
-    let valCtrlDiv = document.getElementById("valueControls") as HTMLElement;
     let exportButton = document.getElementById("exportButton") as HTMLElement;
 
     let graph = new Graph(false);
     let view = new View(canvas, ctx, graph);
-    let valueController = new ValueController(valCtrlDiv, defaultControlValues);
+    let valueController = new ValueController(defaultControlValues);
     let exportController = new ExportViewController(graph);
     let canvasController = new CanvasController(graph, view, valueController);
     
     exportButton.addEventListener("click", e => exportController.handleExport(e));
     canvas.addEventListener("mousedown", e => canvasController.handleMouseDown(e));
     canvas.addEventListener("mouseup", e => canvasController.handleMouseUp(e));
+    document.querySelectorAll("input").forEach((input, key, parent) => {
+        input.addEventListener("change", e => {
+            valueController.handleInputValueChange(input)
+        })
+    }) 
 }

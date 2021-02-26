@@ -12,7 +12,24 @@
 
     <header>
         <div id="controls">
-            <div id="valueControls"></div>
+            <div id="valueControls">
+                <div>
+                    <label for="radius">Radius</label>
+                    <input id="radius" type="number" value="50">
+                </div>
+                <div>
+                    <label for="nodeValue">Node value</label>
+                    <input id="nodeValue" type="text" value="<autoincrement>">
+                </div>
+                <div id="radio-container">
+                    <p>Mode</p> 
+                    <label for="add">Add</label>
+                    <input type="radio" id="add" name="mode" value="add" checked>
+
+                    <label for="delete">Delete</label>
+                    <input type="radio" id="delete" name="mode" value="delete">
+                </div>
+            </div>
             <div id="exportControls">
                 <button id="exportButton">Copy to clipboard as json</button>
             </div>

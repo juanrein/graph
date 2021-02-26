@@ -4,23 +4,28 @@
 }
 
 #controls {
-    height: 10vh;
+    display: flex;
+    justify-content: space-between;
 }
 
-#controls div {
-    display: inline-block;
-    margin-right: 1em;
+#valueControls {
+    display: flex;
+    justify-content: space-between;
 }
-label {
-    display: block;
+
+#radio-container {
+    display: flex;
 }
+
 
 input {
     padding: 0.25em;
 }
 
+input[type=radio]
+
+
 #canvas {
-    height: 90vh;
     background-color: aliceblue;
     display: block;
 }

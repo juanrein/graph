@@ -1,7 +1,7 @@
 import { View } from "./view";
 import { Graph } from "./graph";
 import { Circle, Point } from "./geometry";
-import { ValueController } from "./valueController";
+import { Mode, ValueController } from "./valueController";
 
 export class CanvasController {
     private graph: Graph;
@@ -52,7 +52,17 @@ export class CanvasController {
             //create connection when startpoint and endpoint are both nodes and are not the same node
             if (!startPointNode.equals(endPointNode)) {
                 this.graph.connect(startPointNode, endPointNode);
+            } else {
+                //same node and deletion mode
+                if (this.valueController.values.mode === Mode.DELETE) {
+                    this.graph.delete(startPointNode);
+                }
             }
+        }
+        //move
+        else if (startPointNode && !endPointNode) {
+            startPointNode.circle.point.x = x;
+            startPointNode.circle.point.y = y;
         }
         this.view.update();
     }

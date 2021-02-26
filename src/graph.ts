@@ -1,4 +1,4 @@
-import { Circle, intersects, contains, Point, Line, getLineBetween } from "./geometry"
+import { Circle, intersects, contains, Point, getLineBetween } from "./geometry"
 
 export class GraphNode {
     static identifier: number = 0;
@@ -61,8 +61,6 @@ export class Graph {
     }
 
     connect(a: GraphNode, b: GraphNode) {
-        console.log(a,b);
-        
         let ai = this.nodes.findIndex(v => a.equals(v));
         let bi = this.nodes.findIndex(v => b.equals(v));
         if (ai == -1 || bi == -1) {
@@ -88,5 +86,35 @@ export class Graph {
             }
         }
         return lines;
+    }
+
+    /**
+     * removes this node from nodes
+     * removes this node's connections
+     * removes connections from others to this node
+     */
+    delete(node: GraphNode) {
+        let index = this.nodes.findIndex(n => n.equals(node));
+        if (index === -1) {
+            throw new Error(`Node doesn't exist ${node}`);
+        }
+        this.nodes.splice(index, 1);
+        this.connections.splice(index, 1);
+    
+        for (let i=0; i <this.connections.length; i++) {
+            //remove connection to deleted node
+            let removedI = this.connections[i].findIndex(ni => ni === index);
+            if (removedI !== -1) {
+                this.connections[i].splice(removedI, 1);
+                
+            }
+            //decrement index of connection indexes are now offsetted by the deletition
+            for (let j = 0; j < this.connections[i].length; j++) {
+                if (this.connections[i][j] > index) {
+                    this.connections[i][j]--;
+                }
+            }
+        }
+
     }
 }
