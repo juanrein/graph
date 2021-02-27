@@ -1,6 +1,9 @@
 import { Graph } from "./graph";
 
-export class ExportViewController {
+/**
+ * Copying to clipboard
+ */
+export class ExportController {
     private graph: Graph;
 
     constructor(graph: Graph) {

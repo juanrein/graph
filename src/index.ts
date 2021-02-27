@@ -1,11 +1,12 @@
 import { CanvasController } from "./canvascontroller";
-import { ExportViewController } from "./exportViewController";
+import { ExportController } from "./exportController";
 import { Graph } from "./graph";
 import { ControlValues, Mode, ValueController } from "./valueController";
-import { View } from "./view";
+import { View } from "./canvasView";
 
 
 /**
+ * npm install
  * npx webpack
  * npm run build
  */
@@ -32,7 +33,7 @@ window.onload = () => {
     let graph = new Graph(false);
     let view = new View(canvas, ctx, graph);
     let valueController = new ValueController(defaultControlValues);
-    let exportController = new ExportViewController(graph);
+    let exportController = new ExportController(graph);
     let canvasController = new CanvasController(graph, view, valueController);
     
     exportButton.addEventListener("click", e => exportController.handleExport(e));

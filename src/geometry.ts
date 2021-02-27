@@ -1,3 +1,7 @@
+/**
+ * geometry related structures and functions
+ */
+
 export interface Point {
     x: number;
     y: number;

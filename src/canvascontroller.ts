@@ -1,8 +1,11 @@
-import { View } from "./view";
+import { View } from "./canvasView";
 import { Graph } from "./graph";
 import { Circle, Point } from "./geometry";
 import { Mode, ValueController } from "./valueController";
 
+/**
+ * canvas related functionality
+ */
 export class CanvasController {
     private graph: Graph;
     private view: View;

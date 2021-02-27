@@ -1,3 +1,8 @@
+/**
+ * Graph datastructure
+ * with adjacency list of connections
+ */
+
 import { Circle, intersects, contains, Point, getLineBetween } from "./geometry"
 
 export class GraphNode {

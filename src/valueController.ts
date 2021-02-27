@@ -1,3 +1,7 @@
+/**
+ * Settings for drawing on canvas
+ */
+
 export enum Mode {
     DELETE = "delete", 
     ADD = "add"
