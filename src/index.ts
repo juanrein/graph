@@ -14,6 +14,7 @@ window.onload = () => {
     let defaultControlValues: ControlValues = {
         radius: 50,
         nodeValue: "<autoincrement>",
+        edgeValue: "",
         mode: Mode.ADD
     }
 
@@ -24,10 +25,6 @@ window.onload = () => {
     canvas.width = Math.floor(window.innerWidth);
 
     let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-    ctx.font = "30px Arial"
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    
     let exportButton = document.getElementById("exportButton") as HTMLElement;
 
     let graph = new Graph(false);

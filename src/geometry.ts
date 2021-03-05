@@ -12,6 +12,18 @@ export interface Circle {
     radius: number;
 }
 
+export interface EdgeText {
+    text: string;
+    point: Point;
+}
+
+export function middle(line: Line): Point {
+    return {
+        x: (line.x1 + line.x2)/2.0,
+        y: (line.y1 + line.y2)/2.0
+    }
+}
+
 export interface Line {
     x1: number;
     y1: number;

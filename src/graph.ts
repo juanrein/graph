@@ -3,7 +3,12 @@
  * with adjacency list of connections
  */
 
-import { Circle, intersects, contains, Point, getLineBetween } from "./geometry"
+import { Circle, intersects, contains, Point, getLineBetween, middle, EdgeText } from "./geometry"
+
+export interface Edge {
+    to: number;
+    value: string;
+}
 
 export class GraphNode {
     static identifier: number = 0;
@@ -31,7 +36,7 @@ export class GraphNode {
 
 export class Graph {
     public nodes: GraphNode[]
-    public connections: number[][];
+    public connections: Edge[][];
     private directed: boolean;
     constructor(directed: boolean) {
         this.nodes = [];
@@ -65,29 +70,43 @@ export class Graph {
         return false;
     }
 
-    connect(a: GraphNode, b: GraphNode) {
+    /**
+     * Creates edge between nodes a and b with given value
+     */
+    connect(a: GraphNode, b: GraphNode, edgeValue: string) {
         let ai = this.nodes.findIndex(v => a.equals(v));
         let bi = this.nodes.findIndex(v => b.equals(v));
         if (ai == -1 || bi == -1) {
             throw new Error(`Both nodes don't exist ${a} ${b}`);
         }
-        if (!this.connections[ai].includes(bi)) {
-            this.connections[ai].push(bi);
-            if (!this.directed && !this.connections[bi].includes(ai)) {
-                this.connections[bi].push(ai);
+        if (!this.connections[ai].find(edge => edge.to === bi)) {
+            this.connections[ai].push({to: bi, value: edgeValue});
+            if (!this.directed && !this.connections[bi].find(edge => edge.to === ai)) {
+                this.connections[bi].push({to: ai, value: edgeValue});
             }
         }
 
     }
 
+    /**
+     * lines connecting nodes, edge values and their locations
+     */
     getConnectionsAsLines() {
         let lines = [];
         for (let i=0; i<this.connections.length; i++) {
             let circle = this.nodes[i].circle;
             for (let j=0; j<this.connections[i].length; j++) {
-                let neighbor = this.nodes[this.connections[i][j]];
+                let neighbor = this.nodes[this.connections[i][j].to];
+                let value = this.connections[i][j].value;
                 let line = getLineBetween(circle, neighbor.circle);
-                lines.push(line);
+                let edgeText: EdgeText = {
+                    point: middle(line),
+                    text: value
+                }
+                lines.push({
+                    line: line,
+                    text: edgeText
+                });
             }
         }
         return lines;
@@ -108,15 +127,14 @@ export class Graph {
     
         for (let i=0; i <this.connections.length; i++) {
             //remove connection to deleted node
-            let removedI = this.connections[i].findIndex(ni => ni === index);
+            let removedI = this.connections[i].findIndex(edge => edge.to === index);
             if (removedI !== -1) {
                 this.connections[i].splice(removedI, 1);
-                
             }
-            //decrement index of connection indexes are now offsetted by the deletition
+            //decrement index of connection indexes that are now offsetted by the deletion
             for (let j = 0; j < this.connections[i].length; j++) {
-                if (this.connections[i][j] > index) {
-                    this.connections[i][j]--;
+                if (this.connections[i][j].to > index) {
+                    this.connections[i][j].to--;
                 }
             }
         }

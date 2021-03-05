@@ -54,7 +54,8 @@ export class CanvasController {
         else if (startPointNode && endPointNode) {
             //create connection when startpoint and endpoint are both nodes and are not the same node
             if (!startPointNode.equals(endPointNode)) {
-                this.graph.connect(startPointNode, endPointNode);
+                let edgeValue = this.valueController.values.edgeValue;
+                this.graph.connect(startPointNode, endPointNode, edgeValue);
             } else {
                 //same node and deletion mode
                 if (this.valueController.values.mode === Mode.DELETE) {

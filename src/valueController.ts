@@ -10,7 +10,8 @@ export enum Mode {
 export interface ControlValues {
     radius: number;
     nodeValue: string;
-    mode: Mode,
+    edgeValue: string;
+    mode: Mode;
     [key: string]: string|number;
 }
 
@@ -26,24 +27,29 @@ export class ValueController {
     handleInputValueChange(input: HTMLInputElement) {
         let id = input.id;
         let value = input.value;
-        let type = input.type;
         
-        if (type === "number") {
-            let asInteger = parseInt(value);
-            if (!isNaN(asInteger)) {
-                this.values[id] = asInteger;
-            }
-        }
-        else if (type === "radio") {
-            if (value === "add") {
-                this.values.mode = Mode.ADD;
-            }
-            else {
+        switch (id) {
+            case "edgeValue":
+                this.values.edgeValue = value;
+                break;
+            case "nodeValue":
+                this.values.nodeValue = value;
+                break;
+            case "radius":
+                let asNumber = parseFloat(value);
+                if (!isNaN(asNumber) && asNumber > 0) {
+                    this.values.radius = asNumber;
+                }
+                break;
+            case "delete":
                 this.values.mode = Mode.DELETE;
-            }
-        }
-        else {
-            this.values[id] = value;
+                break;
+            case "add":
+                this.values.mode = Mode.ADD;
+                break; 
+            default:
+                console.error(id, value);
+                break;
         }
     }
 }
