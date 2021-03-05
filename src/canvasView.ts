@@ -2,7 +2,7 @@
  * Canvas drawing
  */
 
-import { EdgeText, Line } from "./geometry";
+import { EdgeText, Line, Connector, Curve, ConnectorType } from "./geometry";
 import { Graph, GraphNode } from "./graph";
 
 const viewSettings = {
@@ -41,17 +41,34 @@ export class View {
 
         this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
         this.graph.nodes.forEach(n => this.drawNode(n))
-        this.graph.getConnectionsAsLines().forEach(line => {
-            this.drawLine(line.line);
-            this.drawText(line.text);
+        this.graph.getConnectionsAsLines().forEach(edge => {
+            if (edge.line.type === ConnectorType.Curve) {
+                this.drawCurve(edge.line as Curve);
+                this.drawText(edge.text, false);
+            }
+            else if (edge.line.type === ConnectorType.Line) {
+                this.drawLine(edge.line as Line);
+                this.drawText(edge.text, true);
+            }
         });
     }
 
-    drawText({text, point: {x,y}}: EdgeText) {
+    drawCurve({x1, y1, cp1x, cp1y, cp2x, cp2y, x2,y2}: Curve) {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
+        this.ctx.stroke();
+    }
+
+    drawText({text, point: {x,y}}: EdgeText, gap: boolean) {
         this.ctx.font = viewSettings.edgeFont;
         this.ctx.fillStyle = viewSettings.edgeFillStyle;
         
-        this.ctx.fillText(text, x + 10, y + 10);
+        if (gap) {
+            this.ctx.fillText(text, x + 10, y + 10);
+        }
+        else {
+            this.ctx.fillText(text, x, y);
+        }
     }
 
     drawNode({circle, value}: GraphNode) {

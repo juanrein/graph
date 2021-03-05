@@ -24,12 +24,43 @@ export function middle(line: Line): Point {
     }
 }
 
+export function topOfCurve(curve: Curve): Point {
+    return {
+        x: (curve.cp1x + curve.cp2x) / 2,
+        y: (curve.cp1y + curve.cp2y) / 2
+    }
+}
+
+export enum ConnectorType {
+    Curve, Line
+}
+
 export interface Line {
+    type: ConnectorType;
     x1: number;
     y1: number;
     x2: number;
     y2: number;
 }
+
+
+
+export interface Curve {
+    type: ConnectorType;
+    x1: number;
+    y1: number;
+    cp1x: number;
+    cp1y: number;
+    cp2x: number;
+    cp2y: number;
+    x2: number;
+    y2: number;
+}
+
+
+export type Connector =
+    | Line
+    | Curve
 
 export function contains(circle: Circle, point: Point): boolean {
     let {point: {x,y},radius} = circle;
@@ -47,6 +78,23 @@ export function intersects(circleA: Circle, circleB: Circle) {
     let distance = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     return distance <= r1 + r2;
 }
+
+export function getCurve(circle: Circle): Curve {
+    let {point:{x,y}, radius} = circle;
+    return {
+        type: ConnectorType.Curve,
+        x1: x + radius,
+        y1: y - radius / 3.0,
+        cp1x: x + 2 * radius,
+        cp1y: y - radius,
+        cp2x: x + 2 * radius,
+        cp2y: y + radius,
+        x2: x + radius,
+        y2: y + radius / 3.0
+    }
+    
+}
+
 
 /**
  * Direct line between centers of circles excluding parts that are inside circles
@@ -75,6 +123,7 @@ export function getLineBetween(circle1: Circle, circle2: Circle): Line {
     let dy2n = dy2 / len2;
 
     return {
+        type: ConnectorType.Line,
         x1: x1 + dx1n * radius1,
         y1: y1 + dy1n * radius1,
         x2: x2 + dx2n * radius2,

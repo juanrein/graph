@@ -61,6 +61,11 @@ export class CanvasController {
                 if (this.valueController.values.mode === Mode.DELETE) {
                     this.graph.delete(startPointNode);
                 }
+                else if (this.valueController.values.mode === Mode.ADD) {
+                    //connection to self
+                    let edgeValue = this.valueController.values.edgeValue;
+                    this.graph.connect(startPointNode, endPointNode, edgeValue)
+                }
             }
         }
         //move

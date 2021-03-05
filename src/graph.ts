@@ -3,7 +3,7 @@
  * with adjacency list of connections
  */
 
-import { Circle, intersects, contains, Point, getLineBetween, middle, EdgeText } from "./geometry"
+import { Circle, intersects, contains, Point, getLineBetween, middle, EdgeText, Connector, getCurve, topOfCurve } from "./geometry"
 
 export interface Edge {
     to: number;
@@ -96,17 +96,33 @@ export class Graph {
         for (let i=0; i<this.connections.length; i++) {
             let circle = this.nodes[i].circle;
             for (let j=0; j<this.connections[i].length; j++) {
-                let neighbor = this.nodes[this.connections[i][j].to];
                 let value = this.connections[i][j].value;
-                let line = getLineBetween(circle, neighbor.circle);
-                let edgeText: EdgeText = {
-                    point: middle(line),
-                    text: value
+                
+                if (this.connections[i][j].to === i) {
+                    console.log("connection to self", i);
+                    let curve = getCurve(circle);
+                    let edgeText: EdgeText = {
+                        point: topOfCurve(curve),
+                        text: value
+                    }
+                    lines.push({
+                        line: curve,
+                        text: edgeText
+                    })
                 }
-                lines.push({
-                    line: line,
-                    text: edgeText
-                });
+                else {
+                    let neighbor = this.nodes[this.connections[i][j].to];
+                    let line = getLineBetween(circle, neighbor.circle);
+                    let edgeText: EdgeText = {
+                        point: middle(line),
+                        text: value
+                    }
+                    lines.push({
+                        line: line,
+                        text: edgeText
+                    });
+                }
+
             }
         }
         return lines;
