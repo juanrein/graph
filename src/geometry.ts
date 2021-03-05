@@ -79,18 +79,22 @@ export function intersects(circleA: Circle, circleB: Circle) {
     return distance <= r1 + r2;
 }
 
+function degreeToRadian(degree: number) {
+    return degree * (Math.PI / 180);
+}
+
 export function getCurve(circle: Circle): Curve {
     let {point:{x,y}, radius} = circle;
     return {
         type: ConnectorType.Curve,
-        x1: x + radius,
-        y1: y - radius / 3.0,
+        x1: x + radius * Math.cos(degreeToRadian(-5)),
+        y1: y + radius * Math.sin(degreeToRadian(-5)),
         cp1x: x + 2 * radius,
         cp1y: y - radius,
         cp2x: x + 2 * radius,
         cp2y: y + radius,
-        x2: x + radius,
-        y2: y + radius / 3.0
+        x2: x + radius * Math.cos(degreeToRadian(5)),
+        y2: y + radius * Math.sin(degreeToRadian(5))
     }
     
 }
