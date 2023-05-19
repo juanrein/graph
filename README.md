@@ -1,7 +1,7 @@
 # graph building tool
 
 Available at
-https://juanrein.github.io/
+[https://juanrein.github.io/](https://juanrein.github.io/graph/)
 
 1. Add nodes by clicking
 2. Create edges between nodes by holding mouse down while moving from one node to another
